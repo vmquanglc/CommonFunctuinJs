@@ -5,4 +5,4 @@ const param = [1,2,null,undefined,{
     address:"lao sky"
 }];
 
-commonFunction.logConsole(commonFunction.cleanArray(param));
+commonFunction.logConsole(123);
