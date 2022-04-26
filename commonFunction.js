@@ -124,16 +124,39 @@ class commonFunction {
         return !this.isArray(data) ? null : data.slice(start, n);
     }
     /**
-     * Loại bỏ phần tử trùng trong mảng đơn (mảng gồm phần tử kiểu dữ liệu nguyên thủy stirng,int,bool).
-     * Ko áp dụng cho mảng object , vì mỗi object trong mảng luôn khác nhau dù cho bên trong có bằng nhau
-     * @param {*} data 
+     * Loại bỏ những phần tử trùng nhau của mảng (áp dụng cho cả mảng single và mảng object)
+     * @param {*} arr mảng
+     * @param {*} arrProperties mảng chứa các prop cần check để bỏ trùng , ngầm định []
      * @returns 
      */
-    removeDuplicateElementArraySingle(data) {
-        if (!this.isArray(data)) {
-            return null;
+    removeDuplicateElementArray(arr,arrProperties = []) {
+        if (!this.isArray(arr)) {
+            return arr;
         }
-        return [...new Set(data)];
+        if(arrProperties.length == 0){
+            return [...new Set(arr)];
+        }
+        //biểu thức chính quy
+        let exp = "";
+        arrProperties.forEach((element,index) => {
+            exp += `obj.${element.toString()} === o.${element.toString()} `;
+            if(index != arrProperties.length -1){
+                exp += " && ";
+            }
+        });
+        if(this.isNullOrEmpty(exp)){
+            return arr;
+        }
+        let result = arr.reduce((unique, o) => {
+            if (!unique.some(obj =>
+                eval(exp)
+                )
+            ) {
+                unique.push(o);
+            }
+            return unique;
+        }, []);
+        return result;
     }
     /**
      * lấy ra danh sách phần tử bị trùng trong mảng.
