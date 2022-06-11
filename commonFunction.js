@@ -124,38 +124,42 @@ class commonFunction {
         return !this.isArray(data) ? null : data.slice(start, n);
     }
     /**
-     * Loại bỏ những phần tử trùng nhau của mảng (áp dụng cho cả mảng single và mảng object)
-     * @param {*} arr mảng
-     * @param {*} arrProperties mảng chứa các prop cần check để bỏ trùng , ngầm định []
+     * Lấy ra những phần tử bị Duplicate trong mảng
+     * @param {*} data mảng dữ liệu
      * @returns 
      */
-    removeDuplicateElementArray(arr,arrProperties = []) {
-        if (!this.isArray(arr)) {
-            return arr;
-        }
-        if(arrProperties.length == 0){
-            return [...new Set(arr)];
-        }
-        //biểu thức chính quy
-        let exp = "";
-        arrProperties.forEach((element,index) => {
-            exp += `obj.${element.toString()} === o.${element.toString()} `;
-            if(index != arrProperties.length -1){
-                exp += " && ";
+    getDuplicateElementArray(data) {
+        let result = [];
+        for (let i = 0; i < data.length - 1; i++) {
+            for (let j = i + 1; j < data.length; j++) {
+                if (JSON.stringify(data[i]) === JSON.stringify(data[j])
+                    && !result.find(x => JSON.stringify(x) === JSON.stringify(data[i]))
+                ) {
+                    result.push(data[i]);
+                    continue;
+                }
             }
-        });
-        if(this.isNullOrEmpty(exp)){
-            return arr;
         }
-        let result = arr.reduce((unique, o) => {
-            if (!unique.some(obj =>
-                eval(exp)
-                )
-            ) {
-                unique.push(o);
+        return result;
+    }
+    /**
+     * Check xem mảng có chứa phần tử bị Duplicate ko
+     * @param {*} data data
+     * @returns true/fa;se
+     */
+    checkArrayHasDupItem(data) {
+        let result = false;
+        for (let i = 0; i < data.length - 1; i++) {
+            for (let j = i + 1; j < data.length; j++) {
+                if (JSON.stringify(data[i]) === JSON.stringify(data[j])) {
+                    result = true;
+                    break;
+                }
             }
-            return unique;
-        }, []);
+            if (result === true) {
+                break;
+            }
+        }
         return result;
     }
     /**
@@ -227,6 +231,12 @@ class commonFunction {
             return data;
         }
         return data.filter(i => i);
+    }
+    cloneArray(data){
+        return data.slice(0);
+    }
+    cloneObject(data){
+        return JSON.parse(JSON.stringify(data));
     }
 }
 export default new commonFunction();
