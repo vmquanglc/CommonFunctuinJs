@@ -232,11 +232,30 @@ class commonFunction {
         }
         return data.filter(i => i);
     }
-    cloneArray(data){
+    /**
+     * Clone mảng
+     * @param {*} data mảng cần clone.
+     * @returns mảng mới
+     */
+    cloneArray(data) {
         return data.slice(0);
     }
-    cloneObject(data){
-        return JSON.parse(JSON.stringify(data));
+    /**
+     * Clone Object loại bỏ references.
+     * @param {*} obj Object cần clone
+     * @returns 
+     */
+    cloneObject(obj) {
+        return JSON.parse(JSON.stringify(obj));
+    }
+    /**
+     * Thêm gạch chân trước các chữ viết hoa trong chuỗi.
+     * Example: WaterLemonTree -> Water_Lemon_Tree
+     * @param {*} content 
+     * @returns 
+     */
+    underlinedBetweenCapitalizationCharacter(content) {
+        return content.replace(/\.?([A-Z]+)/g, "_$1").replace(/^_/, "");
     }
 }
 export default new commonFunction();
